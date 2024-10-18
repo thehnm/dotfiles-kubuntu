@@ -80,7 +80,7 @@ install_bare_git_repository() {
             git_alias checkout 2>&1 | grep -E "\s+\." | awk \{'print $1'\} | xargs -I{} mv {} "$BACKUP_DIR_PATH"/{}
             git_alias checkout
         fi
-        git_alias status.showUntrackedFiles no
+        git_alias config status.showUntrackedFiles no
 
         if [[ $3 == "delete" ]]; then
             rm -rf "$LOCAL_REPO_PATH"
