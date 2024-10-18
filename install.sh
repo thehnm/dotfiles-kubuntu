@@ -63,7 +63,11 @@ ask_yes_no() {
 
 install_bare_git_repository() {
     LOCAL_REPO_PATH="$HOME"/."$2"
-    BACKUP_DIR_PATH="$HOME"/."$2".backup."$(date +'%y%m%d%H%M%S')"
+    BACKUP_DIR_PATH="$HOME"/."$2".backup
+
+    if [ -d "$BACKUP_DIR_PATH" ]; then
+        mv "$BACKUP_DIR_PATH" "$BACKUP_DIR_PATH"."$(date +'%y%m%d%H%M%S')"
+    fi
 
     echo "Cloning $2 ..."
     if git clone --bare "$1" "$LOCAL_REPO_PATH"; then
