@@ -99,7 +99,7 @@ install_fonts() {
     mkdir -p "$FONTS_DIR"
     wget $FONTS_URL
     local fonts_zip_file
-    fonts_zip_file=$(basename $FONTS_URL .zip)
+    fonts_zip_file=$(basename $FONTS_URL)
     unzip "$fonts_zip_file" -d "$FONTS_DIR"
     rm "$fonts_zip_file"
     fc-cache -rf &> /dev/null
