@@ -1,0 +1,15 @@
+[Added Associations]
+inode/directory=org.kde.dolphin.desktop;
+x-scheme-handler/geo=google-maps-geo-handler.desktop;
+x-scheme-handler/http=brave_brave.desktop;
+x-scheme-handler/https=brave_brave.desktop;
+x-scheme-handler/mailto=thunderbird_thunderbird.desktop;
+x-scheme-handler/tel=org.kde.kdeconnect.handler.desktop;
+
+[Default Applications]
+inode/directory=org.kde.dolphin.desktop;
+x-scheme-handler/geo=google-maps-geo-handler.desktop;
+x-scheme-handler/http=brave_brave.desktop;
+x-scheme-handler/https=brave_brave.desktop;
+x-scheme-handler/mailto=thunderbird_thunderbird.desktop;
+x-scheme-handler/tel=org.kde.kdeconnect.handler.desktop;

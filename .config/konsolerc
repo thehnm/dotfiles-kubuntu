@@ -1,0 +1,17 @@
+[Desktop Entry]
+DefaultProfile=RosePine.profile
+
+[General]
+ConfigVersion=1
+
+[MainWindow]
+2048x1152 screen: Height=478
+2048x1152 screen: Width=911
+2048x1152 screen: Window-Maximized=true
+2048x1152 screen: XPosition=568
+2048x1152 screen: YPosition=370
+MenuBar=Enabled
+Virtual-1=Virtual-1
+
+[UiSettings]
+ColorScheme=
