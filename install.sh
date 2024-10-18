@@ -118,7 +118,7 @@ echo "Installing snap dependencies: ${SNAP_DEPENDENCIES[*]}"
 sudo snap install "${SNAP_DEPENDENCIES[@]}"
 
 echo "Install Antibody ZSH Plugin manager"
-mkdir -p "$HOME".local/bin
+mkdir -p "$HOME"/.local/bin
 curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
 
 echo "Install lazygit"
