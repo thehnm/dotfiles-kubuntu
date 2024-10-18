@@ -82,9 +82,9 @@ install_bare_git_repository() {
             rm -rf "$LOCAL_REPO_PATH"
         fi
 
-        return 1
+        return 0
     fi
-    return 0
+    return 1
 }
 
 install_lazygit() {
