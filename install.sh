@@ -87,6 +87,13 @@ install_bare_git_repository() {
     return 0
 }
 
+install_lazygit() {
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit
+    install lazygit "$HOME"/.local/bin
+}
+
 install_fonts() {
     mkdir -p "$FONTS_DIR"
     wget $FONTS_URL
@@ -112,6 +119,9 @@ sudo snap install "${SNAP_DEPENDENCIES[@]}"
 echo "Install Antibody ZSH Plugin manager"
 mkdir -p "$HOME".local/bin
 curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
+
+echo "Install lazygit"
+install_lazygit
 
 echo "Install new fonts"
 install_fonts
