@@ -28,7 +28,7 @@ GIT_REPOSITORIES=(
     "git@github.com:thehnm/nvim.git|https://github.com/thehnm/nvim|$HOME/.config/nvim"
     "git@github.com:thehnm/tmux.git|https://github.com/thehnm/tmux|$HOME/.config/tmux"
 )
-XORG_KEYBOARD_CONFIG_FILE="/etc/X11/xorg.conf.d/00-keyboard.conf"
+XORG_KEYBOARD_CONFIG_FILE=/etc/X11/xorg.conf.d/00-keyboard.conf
 
 FONTS_URL=https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip
 FONTS_DIR=$HOME/.local/share/fonts
