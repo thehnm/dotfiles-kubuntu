@@ -177,3 +177,6 @@ else
     done < "$XORG_KEYBOARD_CONFIG_FILE"
 fi
 
+if ask_yes_no "Do you want to reboot the system now?" "n"; then
+    sudo reboot
+fi
