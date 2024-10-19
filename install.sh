@@ -13,6 +13,7 @@ UBUNTU_DEPENDENCIES=(
     unzip
     nextcloud-desktop
     ssh
+    eza
 )
 
 SNAP_DEPENDENCIES=(
