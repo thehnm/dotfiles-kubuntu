@@ -93,7 +93,14 @@ install_bare_git_repository() {
     return 1
 }
 
+install_antibody_zsh() {
+    echo "Install Antibody ZSH Plugin manager"
+    mkdir -p "$HOME"/.local/bin
+    curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
+}
+
 install_lazygit() {
+    echo "Install lazygit"
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
     curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
     tar xf lazygit.tar.gz lazygit
@@ -102,6 +109,7 @@ install_lazygit() {
 }
 
 install_neovim() {
+    echo "Install neovim"
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
     sudo rm -rf /opt/nvim
     sudo tar -C /opt -xzf nvim-linux64.tar.gz
@@ -109,6 +117,7 @@ install_neovim() {
 }
 
 install_npm() {
+    echo "Install npm"
     NVM_DIR=$HOME/.local/nvm
     NVM_DIR=$HOME/.local/nvm PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash'
     \. "$NVM_DIR/nvm.sh"
@@ -116,6 +125,7 @@ install_npm() {
 }
 
 install_golang() {
+    echo "Install Go"
     wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz
     sudo rm -rf /usr/local/go
     sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
@@ -123,6 +133,7 @@ install_golang() {
 }
 
 install_spotify() {
+    echo "Install Spotify"
     curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
     echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update && sudo apt-get install spotify-client
@@ -153,23 +164,11 @@ fi
 echo "Installing dependencies: ${UBUNTU_DEPENDENCIES[*]}"
 sudo apt-get install -y "${UBUNTU_DEPENDENCIES[@]}"
 
-echo "Install Antibody ZSH Plugin manager"
-mkdir -p "$HOME"/.local/bin
-curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
-
-echo "Install neovim"
+install_antibody_zsh
 install_neovim
-
-echo "Install npm"
 install_npm
-
-echo "Install Go"
 install_golang
-
-echo "Install lazygit"
 install_lazygit
-
-echo "Install Spotify"
 install_spotify
 
 echo "Install Brave Browser"
