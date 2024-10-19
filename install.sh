@@ -203,7 +203,7 @@ for git_repo in "${GIT_REPOSITORIES[@]}"; do
     fi
 done
 
-if [ ! -f $XORG_KEYBOARD_CONFIG_FILE ]; then
+if [[ ! -f $XORG_KEYBOARD_CONFIG_FILE ]]; then
     NEW_FILE_CONTENT=$(cat <<EOF
 Section "InputClass"
         Identifier "system-keyboard"
@@ -216,25 +216,7 @@ EOF
     )
     echo "$NEW_FILE_CONTENT" > sudo tee "$XORG_KEYBOARD_CONFIG_FILE"
 else
-    OPTION_LINE='Option "XkbOptions" "ctrl:nocaps"'
-    TEMP_FILE=$(mktemp)
-    in_input_class_section=false
-    option_added=false
-
-    while IFS= read -r line; do
-        if [[ $line =~ ^Section\ \"InputClass\" ]]; then
-            in_input_class_section=true
-        fi
-        if [[ $line =~ ^EndSection ]]; then
-            if $in_input_class_section && ! $option_added; then
-                echo "        $OPTION_LINE" >> "$TEMP_FILE"
-                option_added=true
-            fi
-            in_input_class_section=false
-        fi
-        echo "$line" >> "$TEMP_FILE"
-    done < "$XORG_KEYBOARD_CONFIG_FILE"
-    mv "$TEMP_FILE" "$XORG_KEYBOARD_CONFIG_FILE"
+    sudo sed -i '/EndSection/i\    Option "XkbOptions" "ctrl:nocaps"' $XORG_KEYBOARD_CONFIG_FILE
 fi
 
 echo "Creating directory for ZSH"
