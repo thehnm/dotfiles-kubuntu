@@ -104,6 +104,30 @@ install_nvidia_drivers() {
     fi
 }
 
+install_rootless_docker() {
+    for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+    sudo apt-get update
+    sudo apt-get install -y ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+    echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    sudo apt-get install -y uidmap dbus-user-session
+    sudo systemctl disable --now docker.service docker.socket
+    sudo rm /var/run/docker.sock
+
+    if ! command -v dockerd-rootless-setuptool.sh &> /dev/null; then
+        sudo apt-get install -y docker-ce-rootless-extras
+    fi
+    dockerd-rootless-setuptool.sh install
+}
+
 install_antibody_zsh() {
     print_message "Install Antibody ZSH Plugin manager"
     mkdir -p "$HOME"/.local/bin
@@ -179,6 +203,7 @@ print_message "Installing dependencies: ${UBUNTU_DEPENDENCIES[*]}"
 sudo apt-get install -y "${UBUNTU_DEPENDENCIES[@]}"
 
 install_nvidia_drivers
+install_rootless_docker
 install_antibody_zsh
 install_neovim
 install_npm
