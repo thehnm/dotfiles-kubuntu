@@ -35,6 +35,10 @@ XORG_KEYBOARD_CONFIG_FILE=/etc/X11/xorg.conf.d/00-keyboard.conf
 FONTS_URL=https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip
 FONTS_DIR=$HOME/.local/share/fonts
 
+print_message() {
+    echo "### $1"
+}
+
 ask_yes_no() {
     local prompt="$1"
     local default="$2"
@@ -71,13 +75,13 @@ install_bare_git_repository() {
         mv "$BACKUP_DIR_PATH" "$BACKUP_DIR_PATH"."$(date +'%y%m%d%H%M%S')"
     fi
 
-    echo "Cloning $2 ..."
+    print_message "Cloning $2 ..."
     if git clone --bare "$1" "$LOCAL_REPO_PATH"; then
         git_alias() {
             git --git-dir="$LOCAL_REPO_PATH" --work-tree="$HOME" "$@"
         }
         if ! git_alias checkout; then
-            echo "Moving existing dotfiles to $BACKUP_DIR_PATH"
+            print_message "Moving existing dotfiles to $BACKUP_DIR_PATH"
             mkdir -p "$BACKUP_DIR_PATH"
             git_alias checkout 2>&1 | grep -E "\s+\." | awk \{'print $1'\} | xargs -I{} mv {} "$BACKUP_DIR_PATH"
             git_alias checkout --force
@@ -95,19 +99,19 @@ install_bare_git_repository() {
 
 install_nvidia_drivers() {
     if lspci -vnnn | grep VGA | grep NVIDIA &> /dev/null; then
-        echo "Installing proprietary NVIDIA drivers"
+        print_message "Installing proprietary NVIDIA drivers"
         sudo ubuntu-drivers install
     fi
 }
 
 install_antibody_zsh() {
-    echo "Install Antibody ZSH Plugin manager"
+    print_message "Install Antibody ZSH Plugin manager"
     mkdir -p "$HOME"/.local/bin
     curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
 }
 
 install_lazygit() {
-    echo "Install lazygit"
+    print_message "Install lazygit"
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
     curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
     tar xf lazygit.tar.gz lazygit
@@ -116,7 +120,7 @@ install_lazygit() {
 }
 
 install_neovim() {
-    echo "Install neovim"
+    print_message "Install neovim"
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
     sudo rm -rf /opt/nvim
     sudo tar -C /opt -xzf nvim-linux64.tar.gz
@@ -124,7 +128,7 @@ install_neovim() {
 }
 
 install_npm() {
-    echo "Install npm"
+    print_message "Install npm"
     NVM_DIR=$HOME/.local/nvm
     NVM_DIR=$HOME/.local/nvm PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash'
     \. "$NVM_DIR/nvm.sh"
@@ -132,7 +136,7 @@ install_npm() {
 }
 
 install_golang() {
-    echo "Install Go"
+    print_message "Install Go"
     wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz
     sudo rm -rf /usr/local/go
     sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
@@ -140,19 +144,21 @@ install_golang() {
 }
 
 install_spotify() {
-    echo "Install Spotify"
+    print_message "Install Spotify"
     curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
     echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update && sudo apt-get install spotify-client
 }
 
 install_brave() {
+    print_message "Install Brave Browser"
     sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
     sudo apt update && sudo apt install brave-browser
 }
 
 install_fonts() {
+    print_message "Install new fonts"
     mkdir -p "$FONTS_DIR"
     wget $FONTS_URL
     local fonts_zip_file
@@ -163,12 +169,12 @@ install_fonts() {
 }
 
 if ! command -v curl &> /dev/null; then
-    echo "# curl is not installed. Installing curl..."
+    print_message "curl is not installed. Installing curl..."
     sudo apt-get update
     sudo apt-get install -y curl
 fi
 
-echo "Installing dependencies: ${UBUNTU_DEPENDENCIES[*]}"
+print_message "Installing dependencies: ${UBUNTU_DEPENDENCIES[*]}"
 sudo apt-get install -y "${UBUNTU_DEPENDENCIES[@]}"
 
 install_nvidia_drivers
@@ -178,11 +184,7 @@ install_npm
 install_golang
 install_lazygit
 install_spotify
-
-echo "Install Brave Browser"
 install_brave
-
-echo "Install new fonts"
 install_fonts
 
 for dotfile_repo in "${DOTFILES_REPOSITORIES[@]}"; do
@@ -191,7 +193,7 @@ for dotfile_repo in "${DOTFILES_REPOSITORIES[@]}"; do
 
     if ! install_bare_git_repository "$ssh_url" "$repo_name" "$delete_repo"; then
         if ! install_bare_git_repository "$http_url" "$repo_name" "$delete_repo"; then
-            echo "ERROR: Failed to clone $http_url. Exiting"
+            print_message "ERROR: Failed to clone $http_url. Exiting"
             return 1
         fi
     fi
@@ -204,10 +206,10 @@ for git_repo in "${GIT_REPOSITORIES[@]}"; do
         mv "$target_location" "$target_location".backup."$(date +'%y%m%d%H%M%S')"
     fi
 
-    echo "Cloning $repo_name ..."
+    print_message "Cloning $repo_name ..."
     if ! git clone "$ssh_url" "$target_location"; then
         if ! git clone "$http_url" "$target_location"; then
-            echo "ERROR: Failed to clone $http_url. Exiting"
+            print_message "ERROR: Failed to clone $http_url. Exiting"
             return 1
         fi
     fi
@@ -229,11 +231,11 @@ else
     sudo sed -i '/EndSection/i\    Option "XkbOptions" "ctrl:nocaps"' $XORG_KEYBOARD_CONFIG_FILE
 fi
 
-echo "Creating directory for ZSH"
+print_message "Creating directory for ZSH"
 mkdir -p "$HOME"/.local/share/zsh
 touch "$HOME"/.local/share/zsh/history
 
-echo "Cleanup"
+print_message "Cleanup"
 rm install.sh
 [ -f "$HOME"/install.sh ] && rm "$HOME"/install.sh # Caused by dotfiles-kubuntu in case script is executed elsewhere
 
