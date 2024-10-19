@@ -262,7 +262,8 @@ mkdir -p "$HOME"/.local/share/zsh
 touch "$HOME"/.local/share/zsh/history
 
 print_message "Cleanup"
-rm -rf Desktop Downloads Documents Music Pictures Public Templates Videos
+rm -rf "$HOME"/Desktop "$HOME"/Downloads "$HOME"/Documents "$HOME"/Music "$HOME"/Pictures "$HOME"/Public "$HOME"/Templates "$HOME"/Videos
+mkdir "$HOME"/desktop "$HOME"/dl "$HOME"/docs "$HOME"/music "$HOME"/pics "$HOME"/public "$HOME"/templates "$HOME"/vids
 rm install.sh
 [ -f "$HOME"/install.sh ] && rm "$HOME"/install.sh # Caused by dotfiles-kubuntu in case script is executed elsewhere
 
