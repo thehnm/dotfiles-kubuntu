@@ -130,6 +130,7 @@ install_neovim() {
 install_npm() {
     print_message "Install npm"
     NVM_DIR=$HOME/.local/nvm
+    mkdir -p "$NVM_DIR"
     NVM_DIR=$HOME/.local/nvm PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash'
     \. "$NVM_DIR/nvm.sh"
     nvm install --lts
