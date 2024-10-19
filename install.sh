@@ -18,6 +18,7 @@ UBUNTU_DEPENDENCIES=(
     build-essential
     python3-virtualenv
     python3-venv
+    python3-pip
     lua5.4
 )
 
