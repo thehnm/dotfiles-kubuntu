@@ -228,7 +228,7 @@ touch "$HOME"/.local/share/zsh/history
 
 echo "Cleanup"
 rm install.sh
-rm "$HOME"/install.sh # Caused by dotfiles-kubuntu
+[ -f "$HOME"/install.sh ] && rm "$HOME"/install.sh # Caused by dotfiles-kubuntu in case script is executed elsewhere
 
 if ask_yes_no "Do you want to reboot the system now?" "n"; then
     sudo reboot
