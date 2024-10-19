@@ -200,6 +200,7 @@ else
         fi
         echo "$line" >> "$TEMP_FILE"
     done < "$XORG_KEYBOARD_CONFIG_FILE"
+    mv "$TEMP_FILE" "$XORG_KEYBOARD_CONFIG_FILE"
 fi
 
 if ask_yes_no "Do you want to reboot the system now?" "n"; then
