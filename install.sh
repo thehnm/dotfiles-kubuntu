@@ -203,6 +203,10 @@ else
     mv "$TEMP_FILE" "$XORG_KEYBOARD_CONFIG_FILE"
 fi
 
+echo "Creating directory for ZSH"
+mkdir -p "$HOME"/.local/share/zsh
+touch "$HOME"/.local/share/zsh/history
+
 if ask_yes_no "Do you want to reboot the system now?" "n"; then
     sudo reboot
 fi
