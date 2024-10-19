@@ -111,7 +111,7 @@ install_neovim() {
 install_npm() {
     NVM_DIR=$HOME/.local/nvm
     NVM_DIR=$HOME/.local/nvm PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash'
-    bash "$NVM_DIR/nvm.sh"
+    \. "$NVM_DIR/nvm.sh"
     nvm install --lts
 }
 
