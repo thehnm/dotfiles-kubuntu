@@ -14,6 +14,11 @@ UBUNTU_DEPENDENCIES=(
     nextcloud-desktop
     ssh
     eza
+    make
+    build-essential
+    python3-virtualenv
+    python3-env
+    lua5.4
 )
 
 SNAP_DEPENDENCIES=(
