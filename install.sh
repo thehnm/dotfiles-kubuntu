@@ -93,6 +93,13 @@ install_bare_git_repository() {
     return 1
 }
 
+install_nvidia_drivers() {
+    if lspci -vnnn | grep VGA | grep NVIDIA &> /dev/null; then
+        echo "Installing proprietary NVIDIA drivers"
+        sudo ubuntu-drivers install
+    fi
+}
+
 install_antibody_zsh() {
     echo "Install Antibody ZSH Plugin manager"
     mkdir -p "$HOME"/.local/bin
@@ -164,6 +171,7 @@ fi
 echo "Installing dependencies: ${UBUNTU_DEPENDENCIES[*]}"
 sudo apt-get install -y "${UBUNTU_DEPENDENCIES[@]}"
 
+install_nvidia_drivers
 install_antibody_zsh
 install_neovim
 install_npm
