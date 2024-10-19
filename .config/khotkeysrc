@@ -1015,7 +1015,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_4Triggers0]
-Key=
+Key=Alt+D
 Type=SHORTCUT
 Uuid={0bdb39f6-391a-4231-a944-93cd31f08b8d}
 
@@ -1041,7 +1041,7 @@ Comment=Simple_action
 TriggersCount=1
 
 [Data_5Triggers0]
-Key=
+Key=Alt+F
 Type=SHORTCUT
 Uuid={017f93ea-812b-4d93-8bab-93f567b5d099}
 
