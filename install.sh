@@ -21,11 +21,6 @@ UBUNTU_DEPENDENCIES=(
     lua5.4
 )
 
-SNAP_DEPENDENCIES=(
-    brave
-    spotify
-)
-
 DOTFILES_REPOSITORIES=(
     "git@github.com:thehnm/dotfiles.git|https://github.com/thehnm/dotfiles|persistent"
     "git@github.com:thehnm/dotfiles-kubuntu.git|https://github.com/thehnm/dotfiles-kubuntu|delete"
@@ -124,6 +119,18 @@ install_golang() {
     rm go1.23.2.linux-amd64.tar.gz
 }
 
+install_spotify() {
+    curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+    echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+    sudo apt-get update && sudo apt-get install spotify-client
+}
+
+install_brave() {
+    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+    sudo apt update && sudo apt install brave-browser
+}
+
 install_fonts() {
     mkdir -p "$FONTS_DIR"
     wget $FONTS_URL
@@ -143,9 +150,6 @@ fi
 echo "Installing dependencies: ${UBUNTU_DEPENDENCIES[*]}"
 sudo apt-get install -y "${UBUNTU_DEPENDENCIES[@]}"
 
-echo "Installing snap dependencies: ${SNAP_DEPENDENCIES[*]}"
-sudo snap install "${SNAP_DEPENDENCIES[@]}"
-
 echo "Install Antibody ZSH Plugin manager"
 mkdir -p "$HOME"/.local/bin
 curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
@@ -161,6 +165,12 @@ install_golang
 
 echo "Install lazygit"
 install_lazygit
+
+echo "Install Spotify"
+install_spotify
+
+echo "Install Brave Browser"
+install_brave
 
 echo "Install new fonts"
 install_fonts
