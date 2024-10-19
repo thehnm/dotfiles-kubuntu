@@ -112,6 +112,18 @@ install_neovim() {
     rm nvim-linux64.tar.gz
 }
 
+install_npm() {
+    PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash'
+    nvm install --lts
+}
+
+install_golang() {
+    wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go
+    sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
+    rm go1.23.2.linux-amd64.tar.gz
+}
+
 install_fonts() {
     mkdir -p "$FONTS_DIR"
     wget $FONTS_URL
@@ -140,6 +152,12 @@ curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
 
 echo "Install neovim"
 install_neovim
+
+echo "Install npm"
+install_npm
+
+echo "Install Go"
+install_golang
 
 echo "Install lazygit"
 install_lazygit
