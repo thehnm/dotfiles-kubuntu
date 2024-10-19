@@ -100,6 +100,12 @@ install_lazygit() {
     install lazygit "$HOME"/.local/bin
 }
 
+install_neovim() {
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+    sudo rm -rf /opt/nvim
+    sudo tar -C /opt -xzf nvim-linux64.tar.gz
+}
+
 install_fonts() {
     mkdir -p "$FONTS_DIR"
     wget $FONTS_URL
@@ -125,6 +131,9 @@ sudo snap install "${SNAP_DEPENDENCIES[@]}"
 echo "Install Antibody ZSH Plugin manager"
 mkdir -p "$HOME"/.local/bin
 curl -sfL git.io/antibody | sh -s - -b "$HOME"/.local/bin/
+
+echo "Install neovim"
+install_neovim
 
 echo "Install lazygit"
 install_lazygit
