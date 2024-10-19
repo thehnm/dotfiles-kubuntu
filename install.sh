@@ -79,7 +79,7 @@ install_bare_git_repository() {
             echo "Moving existing dotfiles to $BACKUP_DIR_PATH"
             mkdir -p "$BACKUP_DIR_PATH"
             git_alias checkout 2>&1 | grep -E "\s+\." | awk \{'print $1'\} | xargs -I{} mv {} "$BACKUP_DIR_PATH"
-            git_alias checkout
+            git_alias checkout --force
         fi
         git_alias config status.showUntrackedFiles no
 
