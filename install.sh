@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 UBUNTU_DEPENDENCIES=(
+    alacritty
     rofi
     fzf
     zsh
@@ -34,6 +35,8 @@ XORG_KEYBOARD_CONFIG_FILE=/etc/X11/xorg.conf.d/00-keyboard.conf
 
 FONTS_URL=https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip
 FONTS_DIR=$HOME/.local/share/fonts
+
+KDE_GLOBALS_FILE=$HOME/.config/kdeglobals
 
 print_message() {
     echo "### $1"
@@ -193,6 +196,26 @@ install_fonts() {
     fc-cache -rf &> /dev/null
 }
 
+set_default_applications() {
+    print_message "Set the default KDE applications"
+    NEW_DEFAULT_APPS=(
+        "BrowserApplication=brave-browser.desktop"
+        "TerminalApplication=alacritty"
+        "TerminalService=Alacritty.desktop"
+    )
+    if ! grep -q "^\[General\]" "$KDE_GLOBALS_FILE"; then
+        echo -e "\n[General]" >> "$KDE_GLOBALS_FILE"
+    fi
+    for line in "${NEW_DEFAULT_APPS[@]}"; do
+        key=$(echo "$line" | cut -d'=' -f1)
+        sed -i "/^\[General\]/,/^\[/{/${key}=/d}" "$KDE_GLOBALS_FILE"
+    done
+
+    for line in "${NEW_DEFAULT_APPS[@]}"; do
+        sed -i "/^\[General\]/a $line" "$KDE_GLOBALS_FILE"
+    done
+}
+
 if ! command -v curl &> /dev/null; then
     print_message "curl is not installed. Installing curl..."
     sudo apt-get update
@@ -260,6 +283,8 @@ fi
 print_message "Creating directory for ZSH"
 mkdir -p "$HOME"/.local/share/zsh
 touch "$HOME"/.local/share/zsh/history
+
+set_default_applications
 
 print_message "Cleanup"
 rm -rf "$HOME"/Desktop "$HOME"/Downloads "$HOME"/Documents "$HOME"/Music "$HOME"/Pictures "$HOME"/Public "$HOME"/Templates "$HOME"/Videos
